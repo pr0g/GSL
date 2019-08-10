@@ -76,7 +76,7 @@ if (CMAKE_VERSION VERSION_GREATER 3.7.8)
     # add natvis file to the library so it will automatically be loaded into Visual Studio
     if(VS_ADD_NATIVE_VISUALIZERS)
         target_sources(GSL INTERFACE
-            ${CMAKE_CURRENT_SOURCE_DIR}/GSL.natvis
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/GSL.natvis>
         )
     endif()
 endif()
