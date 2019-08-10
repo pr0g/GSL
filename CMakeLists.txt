@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1.3)
 
 project(GSL CXX)
 
+include(GNUInstallDirs)
 include(ExternalProject)
 find_package(Git)
 
@@ -54,15 +55,13 @@ target_compile_definitions(GSL INTERFACE
 # the SYSTEM keyword suppresses warnings for users of the library
 if(GSL_STANDALONE_PROJECT)
     target_include_directories(GSL INTERFACE
-        $<BUILD_INTERFACE:
-            ${CMAKE_CURRENT_SOURCE_DIR}/include
-        >
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
 else()
     target_include_directories(GSL SYSTEM INTERFACE
-        $<BUILD_INTERFACE:
-            ${CMAKE_CURRENT_SOURCE_DIR}/include
-        >
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
 endif()
 
@@ -83,12 +82,23 @@ if (CMAKE_VERSION VERSION_GREATER 3.7.8)
 endif()
 
 install(
-    DIRECTORY include/gsl
-    DESTINATION include
+    TARGETS GSL
+    EXPORT MicrosoftGSL-config
+)
+
+install(
+    EXPORT MicrosoftGSL-config
+    NAMESPACE MicrosoftGSL::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MicrosoftGSL
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/gsl/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gsl
 )
 
 option(GSL_TEST "Generate tests." ${GSL_STANDALONE_PROJECT})
 if (GSL_TEST)
 	enable_testing()
 	add_subdirectory(tests)
-endif ()
+endif()
