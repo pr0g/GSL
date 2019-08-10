@@ -83,11 +83,11 @@ endif()
 
 install(
     TARGETS GSL
-    EXPORT MicrosoftGSL-config
+    EXPORT MicrosoftGSLConfig
 )
 
 install(
-    EXPORT MicrosoftGSL-config
+    EXPORT MicrosoftGSLConfig
     NAMESPACE MicrosoftGSL::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MicrosoftGSL
 )
